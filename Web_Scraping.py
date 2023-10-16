@@ -251,8 +251,8 @@ def matriz_tf_idf():
 
 
 # Ejecucion de Script Web Crawling
-#ejecutarScript()
-#print("Se ejecuto el script")
+ejecutarScript()
+print("Se ejecuto el script")
 
 # cargar chingaderas
 biblioteca_nltk()
