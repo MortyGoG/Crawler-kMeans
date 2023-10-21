@@ -1,4 +1,4 @@
-# Scrapy settings for diwsgenProject project
+# Scrapy settings for gatos project
 #
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
@@ -7,14 +7,14 @@
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
-BOT_NAME = "diwsgenProject"
+BOT_NAME = "gatos"
 
-SPIDER_MODULES = ["diwsgenProject.spiders"]
-NEWSPIDER_MODULE = "diwsgenProject.spiders"
+SPIDER_MODULES = ["gatos.spiders"]
+NEWSPIDER_MODULE = "gatos.spiders"
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = "diwsgenProject (+http://www.yourdomain.com)"
+#USER_AGENT = "gatos (+http://www.yourdomain.com)"
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = True
@@ -45,13 +45,13 @@ ROBOTSTXT_OBEY = True
 # Enable or disable spider middlewares
 # See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 #SPIDER_MIDDLEWARES = {
-#    "diwsgenProject.middlewares.DiwsgenprojectSpiderMiddleware": 543,
+#    "gatos.middlewares.GatosSpiderMiddleware": 543,
 #}
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #DOWNLOADER_MIDDLEWARES = {
-#    "diwsgenProject.middlewares.DiwsgenprojectDownloaderMiddleware": 543,
+#    "gatos.middlewares.GatosDownloaderMiddleware": 543,
 #}
 
 # Enable or disable extensions
@@ -63,7 +63,7 @@ ROBOTSTXT_OBEY = True
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 #ITEM_PIPELINES = {
-#    "diwsgenProject.pipelines.DiwsgenprojectPipeline": 300,
+#    "gatos.pipelines.GatosPipeline": 300,
 #}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
