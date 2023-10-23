@@ -4,3 +4,6 @@
 
 # Ignorar archivo #
 2_Practica.py
+
+# Ignorar Archivos de IDE's
+*~

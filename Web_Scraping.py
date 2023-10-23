@@ -47,6 +47,8 @@ diccionario_terminos = {}
 diccionario_terminos_originales = {}
 # Matriz TD_IDF
 matriz_tf_idf = []
+# Documentos
+documentos_en_cluster_consulta = []
 
 # Ventana ------------------------------------------------------------------------
 ''' Configuracion inicial de botones y ventana '''
@@ -524,9 +526,33 @@ boton_MatrizTxt.pack()
 # posiciona el bóton en los pixeles de la pantallas
 boton_MatrizTxt.place(x=428, y=60)   
 
+
+# Lienzo --------------------------------------------------------------------------------
+
+# Crear un lienzo (Canvas) para contener el panel desplazable
+lienzo = tk.Canvas(raiz)
+lienzo.config(width=1378, height=650)
+lienzo.pack(side="left", fill="both", expand=True)
+
+
+# Crear un marco que actuará como el panel desplazable
+panel = tk.Frame(lienzo)
+lienzo.place(x=8, y=220)
+panel.configure(bg="#343641")
+lienzo.configure(bg="#343641")
+lienzo.create_window((510, 0), window=panel, anchor="nw")
+
+
+# Configurar el lienzo para el desplazamiento
+def on_configure(event):
+    lienzo.configure(scrollregion=lienzo.bbox("all"))
+
+lienzo.bind("<Configure>", on_configure)
+
 # Botón Consulta -----------------------------------------------------------------------------
 # Función para obtener el texto del Entry al presionar el botón
 def obtener_texto():
+    global documentos_en_cluster_consulta
     ''' Obtener consulta '''
     consulta = entry.get()
     k = int(entry2.get())
@@ -584,6 +610,22 @@ def obtener_texto():
         for indice in documentos_en_cluster_consulta:
             print(f"Doc{indice}.txt")
             archivo.write(f"Doc{indice}.txt" + "\n")
+    
+    # Antes de agregar los nuevos hipervínculos, eliminar los antiguos
+    for widget in panel.winfo_children():
+        widget.destroy()
+
+    # Agregar contenido al panel
+    for documento in documentos_en_cluster_consulta:
+        # Crear un label con apariencia de hipervínculo
+        hipervinculo = tk.Label(panel, text=f"Click para acceder al Documento {documento}", cursor="hand2")
+        # Cambiar el color de la letra y el tamaño
+        hipervinculo.configure(fg="white", font=("Arial", 20))
+        hipervinculo.configure(bg="#343641")
+        hipervinculo.pack()
+        # Vincular el evento de clic a la función
+        hipervinculo.bind("<Button-1>", lambda event, nombre_txt=f"gatos\\gatos\\spiders\\Doc{documento}.txt": abrir_txt_con_aplicacion_predeterminada(nombre_txt))
+
 
     # Nombre del txt
     nombre_txt = "resultado.txt"
@@ -591,47 +633,62 @@ def obtener_texto():
     abrir_txt_con_aplicacion_predeterminada(nombre_txt)
 
     # Mostrar los documentos del clúster de la consulta
-    label_resultado.configure(text=(f"Mostrando resultados en txt..."))
+    # label_resultado.configure(text=(f"Mostrando resultados en txt..."))
 
-# Crear un Entry para ingresar texto
-entry = Entry(raiz,  width=27, bg="#444654", fg="white", relief="flat", font=fuente_grande)
-entry.pack(pady=100, ipady=100)
-entry.place(x=50, y=245)
+def borrar_texto_ejemplo(event):
+    entry.delete(0, "end")
 
-# Crear un Entry para ingresar texto
-entry2 = Entry(raiz,  width=15, bg="#444654", fg="white", relief="flat", font=fuente_grande)
-entry2.pack(pady=100, ipady=100)
-entry2.place(x=420, y=245)
+# Crear un Entry para Buscar
+entry = Entry(raiz,  width=80, bg="#444654", fg="white", relief="flat", font=fuente_grande)
+entry.insert(0, "       Buscar en el conjunto de Documentos")
+entry.bind("<Button-1>", borrar_texto_ejemplo)
+entry.pack(pady=30, ipady=30)
+entry.place(x=100, y=150)
 
-# Crear un Entry para ingresar texto
-entry3 = Entry(raiz,  width=15, bg="#444654", fg="white", relief="flat", font=fuente_grande)
-entry3.pack(pady=100, ipady=100)
-entry3.place(x=420, y=200)
+def borrar_texto_ejemplo2(event):
+    entry2.delete(0, "end")
+
+# Crear un Entry para ingresar iteraciones
+entry2 = Entry(raiz,  width=20, bg="#444654", fg="white", relief="flat", font=fuente_grande)
+entry2.insert(0, " Número de Iteraciones ")
+entry2.bind("<Button-1>", borrar_texto_ejemplo2)
+entry2.pack(pady=30, ipady=30)
+entry2.place(x=600, y=60)
+
+def borrar_texto_ejemplo3(event):
+    entry3.delete(0, "end")
+
+# Crear un Entry para ingresar k
+entry3 = Entry(raiz,  width=20, bg="#444654", fg="white", relief="flat", font=fuente_grande)
+entry3.insert(0, " Número Clusters (K) ")
+entry3.bind("<Button-1>", borrar_texto_ejemplo3)
+entry3.pack(pady=30, ipady=30)
+entry3.place(x=880, y=60)
 
 # Crear un botón para guardar el texto
-boton_guardar = Button(raiz, text= "Enviar consulta " , command=obtener_texto, bg="#444654", fg="white", relief="flat", padx=10, pady=5)
-boton_guardar.pack(pady=20)
-boton_guardar.place(x=640, y=243) 
+boton_guardar = Button(raiz, text= " BUSCAR " , command=obtener_texto, bg="#444654", fg="white", relief="flat", padx=35, pady=20)
+boton_guardar.pack(pady=50)
+boton_guardar.place(x=1200, y=140) 
 
 # Crear un Label para mostrar el resultado
-fuente_resultado = ("Arial", 13)
-resultado = ""
-label_resultado = tk.Label(raiz, text=resultado, bg="#343641", fg="white", font=fuente_resultado)
-label_resultado.pack()
-label_resultado.place(x=50, y=170)
+# fuente_resultado = ("Arial", 13)
+# resultado = ""
+# label_resultado = tk.Label(raiz, text=resultado, bg="#343641", fg="white", font=fuente_resultado)
+# label_resultado.pack()
+# label_resultado.place(x=50, y=200)
 
 # Info
 fuente_pequeña = ("Arial", 8)
 label_facts = tk.Label(raiz, text="Free Research. RI Sistem must produce accurate information, powered by team 9. RI Sistem October 20 Version", bg="#343641", fg="#C5C5D2", font=fuente_pequeña)
 label_facts.pack()
-label_facts.place(x=59, y=278) 
+label_facts.place(x=410, y=15) 
 
 # Ventana principal ------------------------------------------------------------------
 
 # Titulo de la ventana
 raiz.title("RI Sistem") 
  #Tamaño de la ventana
-raiz.geometry("800x300")
+raiz.geometry("1400x900")
 # Desactivar el redimensionamiento de la ventana
 raiz.resizable(False, False)
 #Color de la ventana
@@ -682,29 +739,29 @@ print("Puedes escribir tú consulta...")
 ''' Metodo del codo '''
 # Metodo del codo
 # Rango de valores de k que deseas evaluar
-k_range = range(1, 100)
+# k_range = range(1, 100)
 
-# Lista para almacenar los valores de WCSS
-wcss = []
+# # Lista para almacenar los valores de WCSS
+# wcss = []
 
-# Realiza K-Means para cada valor de k
-for k in k_range:
-    grupos = k_means(matriz_tf_idf, k, 100)
-    # Calcula WCSS para este valor de k
-    wcss_sum = 0
-    for i in range(k):
-        centroid = np.mean(matriz_tf_idf[grupos[i]], axis=0)
-        distances = [caluclar_distancia_euclidiana(p, centroid) for p in matriz_tf_idf[grupos[i]]]
-        wcss_sum += sum([d ** 2 for d in distances])
-    wcss.append(wcss_sum)
+# # Realiza K-Means para cada valor de k
+# for k in k_range:
+#     grupos = k_means(matriz_tf_idf, k, 100)
+#     # Calcula WCSS para este valor de k
+#     wcss_sum = 0
+#     for i in range(k):
+#         centroid = np.mean(matriz_tf_idf[grupos[i]], axis=0)
+#         distances = [caluclar_distancia_euclidiana(p, centroid) for p in matriz_tf_idf[grupos[i]]]
+#         wcss_sum += sum([d ** 2 for d in distances])
+#     wcss.append(wcss_sum)
 
-# Mostrar gráfica de codo
-import matplotlib.pyplot as plt
-plt.plot(k_range, wcss, marker='o', label='Tachas', color='red')
-plt.xlabel('Cluster')
-plt.ylabel('WCSS')
-plt.title('Método del codo')
-plt.show()
+# # Mostrar gráfica de codo
+# import matplotlib.pyplot as plt
+# plt.plot(k_range, wcss, marker='o', label='Tachas', color='red')
+# plt.xlabel('Cluster')
+# plt.ylabel('WCSS')
+# plt.title('Método del codo')
+# plt.show()
 
 ''' Mostrar Ventana '''
 
