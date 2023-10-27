@@ -12,7 +12,7 @@ Asegúrate de tener instalado Python en tu sistema. Este proyecto se basa en Pyt
 
 1. Clonar el repositorio:
 ```shell
-git clone https://github.com/tuusuario/Crawler-kMeans.git
+git clone https://github.com/MortyGoG/Crawler-kMeans.git
 cd Crawler-kMeans
 ```
 
